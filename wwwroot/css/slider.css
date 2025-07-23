@@ -1,0 +1,57 @@
+﻿.hero-slider {
+    position: relative;
+    margin-top: -100px; /* Header yüksekliğine göre ayarla */
+    z-index: 1;
+    overflow: hidden;
+    
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+}
+
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.slide {
+    min-width: 100%;
+    height: 600px;
+    position: relative;
+}
+
+    .slide img,
+    .slide video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.caption {
+    position: absolute;
+    bottom: 50px;
+    left: 60px;
+    color: white;
+    text-shadow: 0 0 10px rgba(0,0,0,0.7);
+}
+
+.slider-controls {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+    .slider-controls button {
+        background-color: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        padding: 15px;
+        cursor: pointer;
+    }

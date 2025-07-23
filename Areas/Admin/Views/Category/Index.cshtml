@@ -1,0 +1,57 @@
+﻿@using TakiUI4.Areas.Admin.Models
+@model CategoryViewModel
+@{
+    ViewData["Title"] = "Kategori";
+}
+<div>
+    <div id="AddForm">
+        <h3>Categori Ekleme Formu</h3>
+        <form asp-area="Admin" asp-controller="Category" asp-action="Add" method="post">
+            <div class="form-group">
+                <label asp-for="AddCategory"></label>
+                <input asp-for="AddCategory.CategoryName" class="form-control" />
+            </div>
+
+
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary mt-2">Kaydet</button>
+        </form>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="AdminMain" asp-action="Index" class="btn btn-success">Ana Menu</a>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Category" asp-action="GetList" class="btn btn-success">Categori Listele</a>
+    </div>
+    <div>
+        @if (Model.CategoryList != null && Model.CategoryList.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Categori ID</th>
+                        <th>Categori Adı</th>
+                        <th>Islemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CategoryList)
+                    {
+                        <tr>
+                            <td>@item.CategoryID</td>
+                            <td>@item.CategoryName</td>
+                            <td>
+                                <form asp-area="Admin" asp-controller="Category" asp-action="Delete" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="CategoryID" value="@item.CategoryID" />
+                                    <input type="hidden" name="CategoryName" value="@item.CategoryName" />
+                                    <button type="submit" class="btn btn-danger">Sil</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

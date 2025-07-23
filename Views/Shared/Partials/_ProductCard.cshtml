@@ -1,0 +1,31 @@
+﻿@using TakiUI4.Models.DTOs.Product
+@model GetProductDTO
+
+@{
+    var imageList = Model.ProductImageList ?? new List<GetProductImageDTO>();
+    var imageId = $"product-{Model.ProductID}";
+}
+
+<div class="card h-100">
+    <div class="position-relative overflow-hidden" style="height: 200px;"
+         onmouseenter="startImageRotation('@imageId')"
+         onmouseleave="stopImageRotation('@imageId')">
+        @for (int i = 0; i < imageList.Count; i++)
+        {
+            <img src="@imageList[i].ImageUrl"
+                 class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-opacity @(i == 0 ? "opacity-100" : "opacity-0")"
+                 style="transition: opacity 0.5s ease;"
+                 data-index="@i"
+                 data-parent="@imageId" />
+        }
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">@Model.ProductName</h5>
+        <form method="post" asp-controller="Product" asp-action="Detail" onsubmit="addScrollY(this)">
+            <input type="hidden" name="ProductID" value="@Model.ProductID" />
+            <button type="submit" class="btn btn-primary btn-sm">İncele</button>
+        </form>
+
+    </div>
+</div>
+

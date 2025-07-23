@@ -1,0 +1,71 @@
+﻿@using TakiUI4.Models.DTOs.Product
+@model List<GetProductDTO>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    @foreach (var product in Model)
+    {
+        var imageList = product.ProductImageList ?? new List<GetProductImageDTO>();
+        var imageId = $"product-{product.ProductID}";
+
+        <div class="border shadow-lg rounded-lg p-4 hover:shadow-xl transition duration-300">
+
+            <!-- IMAGE SLIDER -->
+            <div class="relative overflow-hidden h-48"
+                 onmouseenter="startImageRotation('@imageId')"
+                 onmouseleave="stopImageRotation('@imageId')">
+                @for (int i = 0; i < imageList.Count; i++)
+                {
+                    <img src="@imageList[i].ImageUrl"
+                         class="absolute w-full h-full object-cover transition-opacity duration-500 @(i == 0 ? "opacity-100" : "opacity-0")"
+                         data-index="@i"
+                         data-parent="@imageId" />
+                }
+            </div>
+
+            <h3 class="text-lg font-semibold mt-4">@product.ProductName</h3>
+
+            <div class="flex justify-between text-sm font-medium mt-2">
+                <a href="/Product/Detail/@product.ProductID" class="text-blue-600 hover:underline">İncele</a>
+                <form method="post" asp-controller="Favorite" asp-action="Add">
+                    <input type="hidden" name="ProductID" value="@product.ProductID" />
+                    <button type="submit" class="text-pink-600 hover:underline">❤</button>
+                </form>
+                <form method="post" asp-controller="Cart" asp-action="Add">
+                    <input type="hidden" name="ProductID" value="@product.ProductID" />
+                    <button type="submit" class="text-green-600 hover:underline">🛒</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    const intervals = {};
+
+    function startImageRotation(containerId) {
+        const images = document.querySelectorAll(`img[data-parent='${containerId}']`);
+        if (images.length <= 1) return;
+
+        let index = 0;
+        intervals[containerId] = setInterval(() => {
+            images.forEach(img => img.classList.remove("opacity-100"));
+            images.forEach(img => img.classList.add("opacity-0"));
+
+            index = (index + 1) % images.length;
+            images[index].classList.remove("opacity-0");
+            images[index].classList.add("opacity-100");
+        }, 1000); // geçiş süresi: 1 saniye
+    }
+
+    function stopImageRotation(containerId) {
+        clearInterval(intervals[containerId]);
+        delete intervals[containerId];
+
+        const images = document.querySelectorAll(`img[data-parent='${containerId}']`);
+        images.forEach(img => img.classList.add("opacity-0"));
+        if (images.length > 0)
+            images[0].classList.remove("opacity-0");
+    }
+</script>
+img {
+    transition: opacity 0.5s ease;
+}

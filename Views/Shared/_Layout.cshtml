@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TakiUI4</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TakiUI4.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/slider.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/product.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/body.css" asp-append-version="true" />
+
+</head>
+<body>
+    <header class="header">
+        @await Component.InvokeAsync("Header")
+    </header>
+    <main class="main">
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <div>
+            <a asp-area="Admin" asp-controller="AdminMain" asp-action="Index" class="btn btn-success">Admine Git</a>
+            <h1 class="text-bg-danger">FOOTER </h1>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/slider.js" asp-append-version="true"></script>
+    <script src="~/js/product.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

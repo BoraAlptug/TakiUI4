@@ -1,0 +1,90 @@
+﻿@using TakiUI4.Areas.Admin.Models
+@model SliderViewModel
+
+@{
+    ViewData["Title"] = "Slider";
+}
+<div>
+    <h3>Yeni Slider Ekle</h3>
+
+    <form asp-area="Admin" asp-controller="Slider" asp-action="Add" method="post">
+        <input type="text" name="Title" placeholder="Başlık" class="form-control" />
+        <input type="text" name="Description" placeholder="Tanım" class="form-control" />
+
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary mt-2">Slider Ekle</button>
+    </form>
+    <div>
+        <a asp-area="Admin" asp-controller="AdminMain" asp-action="Index" class="btn btn-success">Ana Menu</a>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Slider" asp-action="GetList" class="btn btn-success">Slider Listele</a>
+    </div>
+    <div>
+        @if (Model.SliderList != null && Model.SliderList.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Slider ID</th>
+                        <th>Slider Baslik</th>
+                        <th>Medya Ekle</th>
+                        <th>Mevcut Medya</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.SliderList)
+                    {
+                        <tr>
+                            <td>@item.SliderID</td>
+                            <td>@item.Title</td>
+                            <td>
+                                <form asp-area="Admin" asp-controller="Slider" asp-action="AddMedia" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="SliderID" value="@item.SliderID" />
+                                    <input type="file" name="SliderMedia" multiple class="form-control" />
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-secondary mt-1">Medya Ekle</button>
+                                </form>
+                            </td>
+                            <td>
+                                @{
+                                    if (item.MediaUrl != null)
+                                    {
+                                        var ext = System.IO.Path.GetExtension(item.MediaUrl).ToLower();
+
+                                        @if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif" || ext == ".webp")
+                                        {
+                                            <img src="@item.MediaUrl" alt="@item.Title" style="max-width: 100px; max-height: 100px;" />
+                                        }
+                                        else if (ext == ".mp4" || ext == ".webm" || ext == ".ogg")
+                                        {
+                                            <video src="@item.MediaUrl"
+                                                   muted
+                                                   preload="metadata"
+                                                   style="max-width: 100px; max-height: 100px;"
+                                                   onmouseover="this.play()"
+                                                   onmouseout="this.pause(); this.currentTime = 0;">
+                                            </video>
+                                        }
+                                    }
+                                }
+                                <form asp-area="Admin" asp-controller="Slider" asp-action="DeleteMedia" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="SliderMediaID" value="@item.MediaID" />
+                                    <button type="submit" class="btn btn-danger">Sil</button>
+                                </form>
+                            <td>
+                                <form asp-area="Admin" asp-controller="Slider" asp-action="Delete" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="SliderID" value="@item.SliderID" />
+                                    <button type="submit" class="btn btn-danger">Sil</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

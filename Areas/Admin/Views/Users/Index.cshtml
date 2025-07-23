@@ -1,0 +1,57 @@
+﻿@using TakiUI4.Areas.Admin.Models
+
+@model UsersViewModel
+@{
+    ViewData["Title"] = "Kullanıcı";
+}
+<div>
+    <div id="AddForm">
+        <h3>Kullanici Ekleme Formu</h3>
+        <form asp-area="Admin" asp-controller="Users" asp-action="Add" method="post">
+            <div class="form-group">
+                <label asp-for="AddUsers"></label>
+                <input asp-for="AddUsers.UserName" class="form-control" />
+            </div>
+
+
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary mt-2">Kaydet</button>
+        </form>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="AdminMain" asp-action="Index" class="btn btn-success">Ana Menu</a>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Users" asp-action="GetList" class="btn btn-success">Kullanicilari Listele</a>
+    </div>
+    <div>
+        @if (Model.UsersList != null && Model.UsersList.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Kullanici ID</th>
+                        <th>Kullanici Adı</th>
+                        <th>Islemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.UsersList)
+                    {
+                        <tr>
+                            <td>@item.UserID</td>
+                            <td>@item.UserName</td>
+                            <td>
+                                <form asp-area="Admin" asp-controller="Users" asp-action="Delete" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="UserID" value="@item.UserID" />
+                                    <button type="submit" class="btn btn-danger">Sil</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
